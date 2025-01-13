@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Retro Racer</title>
+    <link
+      href="https://fonts.googleapis.com/css2?family=Silkscreen&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      body {
+        background-color: #000;
+        font-family: "Silkscreen", sans-serif;
+        color: #fff;
+        text-align: center;
+      }
+      .game-container {
+        margin: 0 auto;
+        width: 600px;
+        height: 300px;
+        border: 5px solid #fff;
+        position: relative;
+        background-color: #222;
+        overflow: hidden;
+      }
+      .player,
+      .opponent {
+        width: 120px;
+        height: 90px;
+        position: absolute;
+      }
+      .player {
+        bottom: 20px;
+      }
+      .opponent {
+        top: 20px;
+      }
+      .finish-line {
+        height: 100%;
+        width: 20px;
+        background-color: #fff;
+        position: absolute;
+        right: 0;
+        top: 0;
+      }
+      .scoreboard {
+        font-size: 1.5em;
+        margin-top: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Retro Racer :D</h1>
+    <div class="scoreboard">
+      <p>Races Won: <span id="score">User: 0 | Comp: 0</span></p>
+    </div>
+    <div class="game-container">
+      <img
+        class="player"
+        id="player"
+        src="https://cloud-jyv779cc6-hack-club-bot.vercel.app/0user.png"
+        alt="Player"
+      />
+      <img
+        class="opponent"
+        id="opponent"
+        src="https://cloud-jyv779cc6-hack-club-bot.vercel.app/1comp.png"
+        alt="Opponent"
+      />
+      <div class="finish-line"></div>
+    </div>
+
+    <script>
+      const player = document.getElementById("player");
+      const opponent = document.getElementById("opponent");
+      const scoreElem = document.getElementById("score");
+
+      let playerPos = { x: 20, y: 230 };
+      let opponentPos = { x: 20, y: 20 };
+      let playerWins = 0;
+      let compWins = 0;
+
+      let playerSpeed = 5;
+      let opponentSpeed = 3 + Math.random() * 3;
+
+      document.addEventListener("keydown", (e) => {
+        if (e.key === "ArrowRight") playerPos.x += playerSpeed;
+        if (e.key === "ArrowLeft") playerPos.x -= playerSpeed;
+        updatePlayer();
+      });
+
+      function updatePlayer() {
+        player.style.left = `${playerPos.x}px`;
+        checkWin();
+      }
+
+      function updateOpponent() {
+        opponentPos.x += opponentSpeed;
+        opponent.style.left = `${opponentPos.x}px`;
+        checkWin();
+      }
+
+      function checkWin() {
+        if (playerPos.x >= 580) {
+          playerWins++;
+          resetGame();
+        } else if (opponentPos.x >= 580) {
+          compWins++;
+          resetGame();
+        }
+      }
+
+      function resetGame() {
+        playerPos = { x: 20, y: 230 };
+        opponentPos = { x: 20, y: 20 };
+        playerSpeed = 5 + Math.random() * 3;
+        opponentSpeed = 3 + Math.random() * 3;
+        player.style.left = `${playerPos.x}px`;
+        opponent.style.left = `${opponentPos.x}px`;
+        scoreElem.textContent = `User: ${playerWins} | Comp: ${compWins}`;
+      }
+
+      function gameLoop() {
+        updateOpponent();
+        requestAnimationFrame(gameLoop);
+      }
+
+      gameLoop();
+    </script>
+  </body>
+</html>
